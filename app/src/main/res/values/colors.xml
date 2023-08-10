@@ -2,4 +2,21 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Primary background color -->
+    <color name="colorPrimaryBackground">#3A5A40</color>
+
+    <!-- Text color or complementary background -->
+    <color name="colorTextComplementary">#344E41</color>
+
+    <!-- Interactive elements or buttons -->
+    <color name="colorInteractiveElements">#588157</color>
+
+    <!-- Highlight or selected items -->
+    <color name="colorHighlight">#A3B18A</color>
+
+    <!-- Light neutral background -->
+    <color name="colorLightBackground">#DAD7CD</color>
+
+
 </resources>

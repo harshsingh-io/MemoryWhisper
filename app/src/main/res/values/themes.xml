@@ -3,7 +3,25 @@
     <style name="Base.Theme.MemoryWhisper" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-    </style>
 
+        <!-- Primary background color -->
+        <color name="colorPrimaryBackground">#3A5A40</color>
+        <!-- Text color or complementary background -->
+        <color name="colorTextComplementary">#344E41</color>
+        <!-- Interactive elements or buttons -->
+        <color name="colorInteractiveElements">#588157</color>
+        <!-- Highlight or selected items -->
+        <color name="colorHighlight">#A3B18A</color>
+        <!-- Light neutral background -->
+        <color name="colorLightBackground">#DAD7CD</color>
+
+    </style>
+    <style name="CustomNoActionBarTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/colorTextComplementary</item>
+    </style>
+    <style name="CustomToolbarStyle">
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="android:colorControlNormal">#FFFFFF</item>
+    </style>
     <style name="Theme.MemoryWhisper" parent="Base.Theme.MemoryWhisper" />
 </resources>

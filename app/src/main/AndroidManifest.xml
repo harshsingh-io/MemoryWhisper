@@ -13,6 +13,12 @@
         android:theme="@style/Theme.MemoryWhisper"
         tools:targetApi="31">
         <activity
+            android:name=".AddHappyPlaceActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:label="ADD HAPPY MEMORY"
+            android:theme="@style/CustomToolbarStyle"/>
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
