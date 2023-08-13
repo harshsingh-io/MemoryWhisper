@@ -3,15 +3,13 @@
     <style name="Base.Theme.MemoryWhisper" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-
-        <!-- Primary background color -->
-        <item name="colorPrimary">@color/colorTextComplementary</item>
-
-
     </style>
-    <style name="CustomNoActionBarTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
+
+    <!-- Use Theme.Material3 as the base theme for your custom theme -->
+    <style name="CustomNoActionBarTheme" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:statusBarColor">@color/colorTextComplementary</item>
     </style>
+
     <style name="CustomToolbarStyle">
         <item name="android:textColorPrimary">@color/colorLightBackground</item>
         <item name="android:colorControlNormal">@color/colorLightBackground</item>

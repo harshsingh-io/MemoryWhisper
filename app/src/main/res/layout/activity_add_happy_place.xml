@@ -44,8 +44,8 @@
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/edit_text_title"
                     android:layout_width="match_parent"
-                    android:hint="@string/title"
                     android:layout_height="wrap_content"
+                    android:hint="@string/title"
                     android:inputType="textCapWords"
                     android:textColor="@color/colorPrimaryBackground"
                     android:textColorHint="@color/colorPrimaryBackground"
@@ -57,18 +57,18 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-               app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tilTitle">
 
                 <androidx.appcompat.widget.AppCompatEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
                     android:hint="@string/description"
+                    android:inputType="text"
                     android:textColor="@color/colorPrimaryBackground"
                     android:textColorHint="@color/colorPrimaryBackground"
-                    android:textSize="@dimen/edit_text_text_size"  />
+                    android:textSize="@dimen/edit_text_text_size" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -85,7 +85,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/date"
-                    android:inputType="date"
+                    android:inputType="text"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:textColor="@color/colorPrimaryBackground"
                     android:textColorHint="@color/colorPrimaryBackground"
                     android:textSize="@dimen/edit_text_text_size" />
@@ -96,7 +98,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-               app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tilDate">
 
@@ -104,8 +106,8 @@
                     android:id="@+id/edit_text_location"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
                     android:hint="@string/location"
+                    android:inputType="text"
                     android:textColor="@color/colorPrimaryBackground"
                     android:textColorHint="@color/colorPrimaryBackground"
                     android:textSize="@dimen/edit_text_text_size" />
@@ -119,10 +121,11 @@
                 android:padding="@dimen/add_screen_place_image_padding"
                 android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tilLocation"
                 app:srcCompat="@android:drawable/ic_menu_gallery" />
+
             <TextView
                 android:id="@+id/tv_add_image"
                 android:layout_width="wrap_content"
@@ -140,15 +143,16 @@
                 app:layout_constraintStart_toEndOf="@id/ivAddImage"
                 app:layout_constraintTop_toBottomOf="@id/tilLocation"
                 app:layout_constraintVertical_bias="0.019" />
+
             <Button
                 android:id="@+id/button_save"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/shape_button_rounded"
-                android:text="@string/save"
-                android:padding="10dp"
                 android:layout_marginTop="40dp"
+                android:background="@drawable/shape_button_rounded"
                 android:gravity="center"
+                android:padding="10dp"
+                android:text="@string/save"
                 android:textColor="@color/colorLightBackground"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
