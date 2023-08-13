@@ -17,7 +17,7 @@
             android:exported="false"
             android:screenOrientation="portrait"
             android:label="ADD HAPPY MEMORY"
-            android:theme="@style/CustomToolbarStyle"/>
+            android:theme="@style/CustomNoActionBarTheme"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">

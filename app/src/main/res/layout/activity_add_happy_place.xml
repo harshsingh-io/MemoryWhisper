@@ -8,13 +8,153 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_add_place"
-        android:background="@color/colorPrimaryBackground"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimaryBackground"
         android:theme="@style/CustomToolbarStyle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <ScrollView
+        android:id="@+id/sv_main"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_add_place">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clComponents"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/main_content_padding">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilTitle"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/edit_text_title"
+                    android:layout_width="match_parent"
+                    android:hint="@string/title"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords"
+                    android:textColor="@color/colorPrimaryBackground"
+                    android:textColorHint="@color/colorPrimaryBackground"
+                    android:textSize="@dimen/edit_text_text_size" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilDescription"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+               app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tilTitle">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:hint="@string/description"
+                    android:textColor="@color/colorPrimaryBackground"
+                    android:textColorHint="@color/colorPrimaryBackground"
+                    android:textSize="@dimen/edit_text_text_size"  />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilDate"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tilDescription">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/edit_text_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/date"
+                    android:inputType="date"
+                    android:textColor="@color/colorPrimaryBackground"
+                    android:textColorHint="@color/colorPrimaryBackground"
+                    android:textSize="@dimen/edit_text_text_size" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilLocation"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+               app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tilDate">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/edit_text_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:hint="@string/location"
+                    android:textColor="@color/colorPrimaryBackground"
+                    android:textColorHint="@color/colorPrimaryBackground"
+                    android:textSize="@dimen/edit_text_text_size" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivAddImage"
+                android:layout_width="@dimen/add_screen_place_image_size"
+                android:layout_height="@dimen/add_screen_place_image_size"
+                android:background="@drawable/shape_image_view_border"
+                android:padding="@dimen/add_screen_place_image_padding"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintTop_toBottomOf="@+id/tilLocation"
+                app:srcCompat="@android:drawable/ic_menu_gallery" />
+            <TextView
+                android:id="@+id/tv_add_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/add_screen_text_add_image_marginTop"
+                android:background="?attr/selectableItemBackground"
+                android:padding="@dimen/add_screen_text_add_image_padding"
+                android:text="@string/add_image"
+                android:textColor="@color/colorPrimaryBackground"
+                android:textSize="@dimen/add_screen_text_add_image_textSize"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/button_save"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.45"
+                app:layout_constraintStart_toEndOf="@id/ivAddImage"
+                app:layout_constraintTop_toBottomOf="@id/tilLocation"
+                app:layout_constraintVertical_bias="0.019" />
+            <Button
+                android:id="@+id/button_save"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_button_rounded"
+                android:text="@string/save"
+                android:padding="10dp"
+                android:layout_marginTop="40dp"
+                android:gravity="center"
+                android:textColor="@color/colorLightBackground"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ivAddImage" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

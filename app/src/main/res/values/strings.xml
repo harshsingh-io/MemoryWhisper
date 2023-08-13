@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">MemoryWhisper</string>
+    <string name="adding_places">Adding Places</string>
+    <string name="description">Description</string>
+    <string name="date">Date</string>
+    <string name="location">Location</string>
+    <string name="title">Title</string>
+    <string name="save">Save</string>
+    <string name="add_image">Add Image</string>
 </resources>

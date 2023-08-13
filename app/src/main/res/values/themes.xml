@@ -5,23 +5,17 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
 
         <!-- Primary background color -->
-        <color name="colorPrimaryBackground">#3A5A40</color>
-        <!-- Text color or complementary background -->
-        <color name="colorTextComplementary">#344E41</color>
-        <!-- Interactive elements or buttons -->
-        <color name="colorInteractiveElements">#588157</color>
-        <!-- Highlight or selected items -->
-        <color name="colorHighlight">#A3B18A</color>
-        <!-- Light neutral background -->
-        <color name="colorLightBackground">#DAD7CD</color>
+        <item name="colorPrimary">@color/colorTextComplementary</item>
+
 
     </style>
     <style name="CustomNoActionBarTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="android:statusBarColor">@color/colorTextComplementary</item>
     </style>
     <style name="CustomToolbarStyle">
-        <item name="android:textColorPrimary">#FFFFFF</item>
-        <item name="android:colorControlNormal">#FFFFFF</item>
+        <item name="android:textColorPrimary">@color/colorLightBackground</item>
+        <item name="android:colorControlNormal">@color/colorLightBackground</item>
     </style>
+
     <style name="Theme.MemoryWhisper" parent="Base.Theme.MemoryWhisper" />
 </resources>
