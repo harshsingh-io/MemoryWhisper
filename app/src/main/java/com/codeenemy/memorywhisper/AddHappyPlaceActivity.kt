@@ -1,31 +1,51 @@
 package com.codeenemy.memorywhisper
 
 import android.Manifest
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
 import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.provider.Settings
+import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.codeenemy.memorywhisper.databinding.ActivityAddHappyPlaceBinding
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import java.util.UUID
 
 class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
     private var binding: ActivityAddHappyPlaceBinding? = null
     private var cal = Calendar.getInstance()
     private lateinit var dateSetListener: DatePickerDialog.OnDateSetListener
+    companion object {
+//        private const val CAMERA_PERMISSION_CODE = 1
+        private const val CAMERA = 2
+        private const val GALLERY = 1
+        private const val IMAGE_DIRECTORY = "MemoryWishperImages"
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddHappyPlaceBinding.inflate(layoutInflater)
@@ -65,16 +85,39 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
                 pickerDialog.setItems(pictureDialogItems) { dialog, which ->
                     when (which) {
                         0 -> choosePhotoFromGallery()
-                        1 -> Toast.makeText(
-                            this@AddHappyPlaceActivity,
-                            "Camera Selection Coming soon...",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        1 -> takePhotoFromCamera()
                     }
                 }
                 pickerDialog.show()
             }
         }
+    }
+
+    private fun takePhotoFromCamera() {
+//        if (ContextCompat.checkSelfPermission(this,Manifest.permission
+//                .CAMERA) == PackageManager.PERMISSION_GRANTED){
+//            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+//            startActivityForResult(intent, CAMERA_REQUEST_CODE)
+//        } else {
+//            ActivityCompat.requestPermissions(this, arrayOf(Manifest
+//                .permission.CAMERA), CAMERA_PERMISSION_CODE)
+//        }
+        Dexter.withActivity(this).withPermissions(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA
+        ).withListener(object: MultiplePermissionsListener {
+            override fun onPermissionsChecked( report: MultiplePermissionsReport?) {
+                if (report!!.areAllPermissionsGranted()) {
+                    val galleryIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                    startActivityForResult(galleryIntent, CAMERA)
+                }
+            }
+            override fun onPermissionRationaleShouldBeShown( permissions: MutableList<PermissionRequest>, token: PermissionToken
+            ) {
+                showRationalDialogForPermissions()
+            }
+        }).onSameThread().check();
     }
 
     private fun choosePhotoFromGallery() {
@@ -85,10 +128,8 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
         ).withListener(object: MultiplePermissionsListener {
             override fun onPermissionsChecked( report: MultiplePermissionsReport?) {
                 if (report!!.areAllPermissionsGranted()) {
-                    Toast.makeText(this@AddHappyPlaceActivity,
-                        "Storage READ/WRITE permission are granted. Now you can select an image " +
-                                "from GALLERY",
-                        Toast.LENGTH_SHORT).show()
+                    val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                    startActivityForResult(galleryIntent, GALLERY)
                 }
             }
             override fun onPermissionRationaleShouldBeShown( permissions: MutableList<PermissionRequest>, token: PermissionToken
@@ -123,6 +164,71 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
         binding?.editTextDate?.setText(sdf.format(cal.time).toString())
     }
 
+    /*
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == CAMERA_PERMISSION_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                startActivityForResult(intent, CAMERA)
+            } else {
+                Toast.makeText(
+                    this,
+                    "Oops you just denied the permission for camera. Don't Worry you can allow it" +
+                            " in the App Settings.",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+    }
+*/
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == CAMERA) {
+                val thumbnail: Bitmap = data!!.extras!!.get("data") as Bitmap
+                val saveImageToInternalStorage = saveImageToInternalStorage(thumbnail)
+
+                Log.e("Saved Image : ", "Path : $saveImageToInternalStorage")
+                binding?.ivAddImage?.setImageBitmap(thumbnail)
+            }else if (requestCode == GALLERY) {
+                if (data!=null){
+                    val contentURI = data.data
+                    try {
+                        val selectedImageBitmap = MediaStore.Images.Media.getBitmap(this
+                            .contentResolver, contentURI)
+                        val saveImageToInternalStorage = saveImageToInternalStorage(selectedImageBitmap)
+
+                        Log.e("Saved Image : ", "Path : $saveImageToInternalStorage")
+                        binding?.ivAddImage?.setImageBitmap(selectedImageBitmap)
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                        Toast.makeText(this@AddHappyPlaceActivity, "Failed to load Image!", Toast
+                            .LENGTH_LONG).show()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun saveImageToInternalStorage(bitmap: Bitmap):Uri {
+        val wrapper = ContextWrapper(applicationContext)
+        var file = wrapper.getDir(IMAGE_DIRECTORY, Context.MODE_PRIVATE)
+        file = File(file, "${UUID.randomUUID()}.jpg")
+        try {
+            val stream:OutputStream = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+            stream.flush()
+            stream.close()
+        } catch (e:IOException) {
+            e.printStackTrace()
+        }
+        return Uri.parse(file.absolutePath)
+    }
     override fun onDestroy() {
         super.onDestroy()
         binding = null
