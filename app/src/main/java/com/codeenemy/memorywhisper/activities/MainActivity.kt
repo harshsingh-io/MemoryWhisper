@@ -1,4 +1,4 @@
-package com.codeenemy.memorywhisper
+package com.codeenemy.memorywhisper.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity

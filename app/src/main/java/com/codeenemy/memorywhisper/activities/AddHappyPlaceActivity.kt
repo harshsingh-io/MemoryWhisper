@@ -1,15 +1,13 @@
-package com.codeenemy.memorywhisper
+package com.codeenemy.memorywhisper.activities
 
 import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
-import android.app.DatePickerDialog.OnDateSetListener
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -19,8 +17,7 @@ import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
+import com.codeenemy.memorywhisper.R
 import com.codeenemy.memorywhisper.databinding.ActivityAddHappyPlaceBinding
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
@@ -40,6 +37,10 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
     private var binding: ActivityAddHappyPlaceBinding? = null
     private var cal = Calendar.getInstance()
     private lateinit var dateSetListener: DatePickerDialog.OnDateSetListener
+    private var saveImageToInternalStorage : Uri? = null
+    private var mLatitude : Double = 0.0
+    private var mLongitude : Double = 0.0
+
     companion object {
 //        private const val CAMERA_PERMISSION_CODE = 1
         private const val CAMERA = 2
@@ -89,6 +90,9 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
                     }
                 }
                 pickerDialog.show()
+            }
+            R.id.button_save -> {
+                // TODO Save the Datamodel to Database
             }
         }
     }
@@ -163,7 +167,6 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
         val sdf = SimpleDateFormat(myFormat, Locale.getDefault())
         binding?.editTextDate?.setText(sdf.format(cal.time).toString())
     }
-
     /*
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -185,13 +188,14 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
             }
         }
     }
+
 */
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == CAMERA) {
                 val thumbnail: Bitmap = data!!.extras!!.get("data") as Bitmap
-                val saveImageToInternalStorage = saveImageToInternalStorage(thumbnail)
+                saveImageToInternalStorage = saveImageToInternalStorage(thumbnail)
 
                 Log.e("Saved Image : ", "Path : $saveImageToInternalStorage")
                 binding?.ivAddImage?.setImageBitmap(thumbnail)
@@ -201,7 +205,7 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
                     try {
                         val selectedImageBitmap = MediaStore.Images.Media.getBitmap(this
                             .contentResolver, contentURI)
-                        val saveImageToInternalStorage = saveImageToInternalStorage(selectedImageBitmap)
+                        saveImageToInternalStorage = saveImageToInternalStorage(selectedImageBitmap)
 
                         Log.e("Saved Image : ", "Path : $saveImageToInternalStorage")
                         binding?.ivAddImage?.setImageBitmap(selectedImageBitmap)
