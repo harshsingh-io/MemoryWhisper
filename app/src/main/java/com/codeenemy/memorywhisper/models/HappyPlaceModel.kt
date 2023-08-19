@@ -1,9 +1,5 @@
 package com.codeenemy.memorywhisper.models
 
-import androidx.room.Entity
-
-@Entity(tableName = "happyPlace-table")
-
 data class HappyPlaceModel(
     val id: Int,
     val title: String,

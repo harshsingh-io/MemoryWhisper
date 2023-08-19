@@ -2,13 +2,13 @@ package com.codeenemy.memorywhisper.database
 
 import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import androidx.room.Database
-
-import com.codeenemy.memorywhisper.models.HappyPlaceModel
+import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
+import com.codeenemy.memorywhisper.models.HappyPlaceModel
 
-@Database(entities = [HappyPlaceModel::class], version = 1)
+//@Database(entities = [HappyPlaceModel::class], version = 1)
 class DatabaseHandler(context: Context) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
@@ -46,6 +46,7 @@ class DatabaseHandler(context: Context) :
         db!!.execSQL("DROP TABLE IF EXISTS $TABLE_HAPPY_PLACE")
         onCreate(db)
     }
+
     fun addHappyPlace(happyPlace: HappyPlaceModel): Long {
         val db = this.writableDatabase
         val contentValues = ContentValues()
@@ -64,18 +65,32 @@ class DatabaseHandler(context: Context) :
         return result
     }
 
-//        fun getInstance(context: Context): DatabaseHandler {
-//            synchronized(this) {
-//                var instance = INSTANCE
-//
-//                if (instance == null) {
-//                    instance = Room.databaseBuilder(
-//                        context.applicationContext, DatabaseHandler::class.java,
-//                        "happyPlace_database"
-//                    ).fallbackToDestructiveMigration().build()
-//                    INSTANCE = instance
-//                }
-//                return instance
-//            }
-//        }
+    fun getHappyPlacesList(): ArrayList<HappyPlaceModel> {
+        val happyPlaceList: ArrayList<HappyPlaceModel> = ArrayList()
+        val selectQuery = "SELECT * FROM $TABLE_HAPPY_PLACE"
+        val db = this.readableDatabase
+        try {
+            val cursor: Cursor = db.rawQuery(selectQuery, null)
+            if (cursor.moveToFirst()) {
+                do {
+                    val place = HappyPlaceModel(
+                        cursor.getInt(cursor.getColumnIndex(KEY_ID)),
+                        cursor.getString(cursor.getColumnIndex(KEY_TITLE)),
+                        cursor.getString(cursor.getColumnIndex(KEY_IMAGE)),
+                        cursor.getString(cursor.getColumnIndex(KEY_DESCRIPTION)),
+                        cursor.getString(cursor.getColumnIndex(KEY_DATE)),
+                        cursor.getString(cursor.getColumnIndex(KEY_LOCATION)),
+                        cursor.getDouble(cursor.getColumnIndex(KEY_LATITUDE)),
+                        cursor.getDouble(cursor.getColumnIndex(KEY_LONGITUDE))
+                    )
+                    happyPlaceList.add(place)
+                } while (cursor.moveToNext())
+            }
+            cursor.close()
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return ArrayList()
+        }
+        return happyPlaceList
+    }
 }

@@ -39,6 +39,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="im.dino.dbinspector.activities.DbInspectorActivity"
+            android:exported="true"> <!-- or "false" depending on your app's requirements -->
+            <!-- Intent filter and other attributes for the activity -->
+        </activity>
+
     </application>
 
 </manifest>
