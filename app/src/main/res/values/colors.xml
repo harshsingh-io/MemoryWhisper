@@ -19,4 +19,10 @@
     <color name="colorLightBackground">#DAD7CD</color>
 
 
+    <color name="circularImageBorderColor">#757575</color>
+    <color name="itemHappyPlaceDescriptionTextColor">#606060</color>
+
+
+
+
 </resources>

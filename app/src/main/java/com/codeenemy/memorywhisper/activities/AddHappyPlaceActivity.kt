@@ -144,6 +144,7 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+
     private fun takePhotoFromCamera() {
 //        if (ContextCompat.checkSelfPermission(this,Manifest.permission
 //                .CAMERA) == PackageManager.PERMISSION_GRANTED){
