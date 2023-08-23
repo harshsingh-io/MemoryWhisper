@@ -6,13 +6,10 @@
         android:name="android.hardware.camera"
         android:required="false" />
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-
     <uses-permission android:name="android.permission.CAMERA" />
-
 
     <application
         android:allowBackup="true"
@@ -25,11 +22,17 @@
         android:theme="@style/Theme.MemoryWhisper"
         tools:targetApi="31">
         <activity
+            android:name=".activities.HappyPlaceDetailActivity"
+            android:exported="false"
+            android:label="MEMORY PLACE Details"
+            android:screenOrientation="portrait"
+            android:theme="@style/CustomNoActionBarTheme" />
+        <activity
             android:name=".activities.AddHappyPlaceActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
             android:label="ADD HAPPY MEMORY"
-            android:theme="@style/CustomNoActionBarTheme"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/CustomNoActionBarTheme" />
         <activity
             android:name=".activities.MainActivity"
             android:exported="true">
@@ -44,7 +47,6 @@
             android:exported="true"> <!-- or "false" depending on your app's requirements -->
             <!-- Intent filter and other attributes for the activity -->
         </activity>
-
     </application>
 
 </manifest>
