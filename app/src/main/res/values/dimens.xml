@@ -28,4 +28,17 @@
     <dimen name="item_happy_place_title_textSize">16sp</dimen>
     <dimen name="item_happy_place_description_textSize">14sp</dimen>
 
+    <dimen name="detail_screen_image_height_size">250dp</dimen>
+    <dimen name="detail_screen_description_margin">8dp</dimen>
+    <dimen name="detail_screen_description_text_size">16sp</dimen>
+    <dimen name="detail_screen_location_marginStartEnd">8dp</dimen>
+    <dimen name="detail_screen_location_marginTop">16dp</dimen>
+    <dimen name="detail_screen_location_text_size">18sp</dimen>
+
+    <!--START-->
+    <dimen name="detail_screen_btn_view_on_map_marginStartEnd">8dp</dimen>
+    <dimen name="detail_screen_btn_view_on_map_marginTop">16dp</dimen>
+    <dimen name="detail_screen_btn_view_on_map_PaddingTopBottom">8dp</dimen>
+    <dimen name="detail_screen_btn_view_on_map_text_size">18sp</dimen>
+
 </resources>

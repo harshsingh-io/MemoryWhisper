@@ -9,4 +9,5 @@
     <string name="add_image">Add Image</string>
     <string name="no_memory_found_yet">No Memory Found Yet</string>
     <string name="image">Image</string>
+    <string name="btn_text_view_on_map">VIEW ON MAP</string>
 </resources>

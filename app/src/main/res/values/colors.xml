@@ -18,11 +18,7 @@
     <!-- Light neutral background -->
     <color name="colorLightBackground">#DAD7CD</color>
 
-
     <color name="circularImageBorderColor">#757575</color>
     <color name="itemHappyPlaceDescriptionTextColor">#606060</color>
-
-
-
-
+    <color name="detail_screen_description_text_color">#757575</color>
 </resources>
