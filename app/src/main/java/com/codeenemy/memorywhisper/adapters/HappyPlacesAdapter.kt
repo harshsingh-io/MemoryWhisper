@@ -15,6 +15,7 @@ import com.codeenemy.memorywhisper.databinding.ItemHappyPlaceBinding
 open class HappyPlacesAdapter(
     private val context: Context, private var list: ArrayList<HappyPlaceModel>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private var onClickListener: OnClickListener? = null
 
     class ViewHolder(binding: ItemHappyPlaceBinding) : RecyclerView.ViewHolder(binding.root) {
         val ivPlaceImage = binding.ivPlaceImage
@@ -36,11 +37,22 @@ open class HappyPlacesAdapter(
             holder.ivPlaceImage.setImageURI(Uri.parse(model.image))
             holder.tvTitle.text = model.title
             holder.tvDescription.text = model.description
+            holder.itemView.setOnClickListener {
+                if (onClickListener != null){
+                    onClickListener!!.onClick(position, model)
+                }
+            }
         }
+    }
+    fun setOnClickListener(onClickListener: OnClickListener) {
+        this.onClickListener = onClickListener
     }
 
     override fun getItemCount(): Int {
         return list.size
+    }
+    interface OnClickListener {
+        fun onClick(position: Int, model: HappyPlaceModel)
     }
 
 //    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
