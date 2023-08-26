@@ -42,6 +42,8 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
     private var saveImageToInternalStorage: Uri? = null
     private var mLatitude: Double = 0.0
     private var mLongitude: Double = 0.0
+    private var mHappyPlaceDetails: HappyPlaceModel? = null
+
 
     companion object {
         //        private const val CAMERA_PERMISSION_CODE = 1
@@ -59,6 +61,11 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
         binding?.toolbarAddPlace?.setNavigationOnClickListener {
             onBackPressed()
         }
+        if (intent.hasExtra(MainActivity.EXTRA_PLACE_DETAILS)) {
+            mHappyPlaceDetails = intent.getSerializableExtra(
+                MainActivity.EXTRA_PLACE_DETAILS) as HappyPlaceModel
+
+        }
         dateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
             cal.set(Calendar.YEAR, year)
             cal.set(Calendar.MONTH, month)
@@ -66,6 +73,22 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
             updateDateInView()
         }
         updateDateInView()
+        if (mHappyPlaceDetails != null) {
+            supportActionBar?.title = "Edit Happy Place"
+
+            binding?.editTextTitle?.setText(mHappyPlaceDetails!!.title)
+            binding?.editTextDescription?.setText(mHappyPlaceDetails!!.description)
+            binding?.editTextDate?.setText(mHappyPlaceDetails!!.date)
+            binding?.editTextLocation?.setText(mHappyPlaceDetails!!.location)
+            mLatitude = mHappyPlaceDetails!!.latitude
+            mLongitude = mHappyPlaceDetails!!.longitude
+
+            saveImageToInternalStorage = Uri.parse(
+                mHappyPlaceDetails!!.image
+            )
+            binding?.ivAddImage?.setImageURI(saveImageToInternalStorage)
+            binding?.buttonSave?.text = "UPDATE"
+        }
         binding?.editTextDate?.setOnClickListener(this)
         binding?.tvAddImage?.setOnClickListener(this)
         binding?.buttonSave?.setOnClickListener(this)

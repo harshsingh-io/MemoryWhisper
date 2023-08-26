@@ -7,10 +7,12 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.codeenemy.memorywhisper.adapters.HappyPlacesAdapter
 import com.codeenemy.memorywhisper.database.DatabaseHandler
 import com.codeenemy.memorywhisper.databinding.ActivityMainBinding
 import com.codeenemy.memorywhisper.models.HappyPlaceModel
+import pl.kitek.rvswipetodelete.SwipeToEditCallback
 
 class MainActivity : AppCompatActivity() {
     private var binding: ActivityMainBinding? = null
@@ -40,6 +42,12 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         })
+        val editSwipeHandler = object : SwipeToEditCallback(this){
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val adapter = binding?.rvHappyPlacesList?.adapter as HappyPlacesAdapter
+                adapter.notifyEditItem(this@MainActivity, viewHolder.adapterPosition, ADD_PlACE_ACTIVITY_REQUEST_CODE)
+            }
+        }
     }
     private fun getHappyPlacesListFromLocalDB() {
         val dbHandler = DatabaseHandler(this)
