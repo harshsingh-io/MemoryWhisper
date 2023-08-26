@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.codeenemy.memorywhisper.adapters.HappyPlacesAdapter
@@ -48,6 +49,9 @@ class MainActivity : AppCompatActivity() {
                 adapter.notifyEditItem(this@MainActivity, viewHolder.adapterPosition, ADD_PlACE_ACTIVITY_REQUEST_CODE)
             }
         }
+
+        val editItemTouchHelper = ItemTouchHelper(editSwipeHandler)
+        editItemTouchHelper.attachToRecyclerView(binding?.rvHappyPlacesList)
     }
     private fun getHappyPlacesListFromLocalDB() {
         val dbHandler = DatabaseHandler(this)
