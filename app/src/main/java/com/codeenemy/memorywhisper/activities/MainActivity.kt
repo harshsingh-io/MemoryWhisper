@@ -14,6 +14,8 @@ import com.codeenemy.memorywhisper.database.DatabaseHandler
 import com.codeenemy.memorywhisper.databinding.ActivityMainBinding
 import com.codeenemy.memorywhisper.models.HappyPlaceModel
 import pl.kitek.rvswipetodelete.SwipeToEditCallback
+import pl.kitek.rvswipetodelete.SwipeToDeleteCallback
+
 
 class MainActivity : AppCompatActivity() {
     private var binding: ActivityMainBinding? = null
@@ -47,11 +49,21 @@ class MainActivity : AppCompatActivity() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val adapter = binding?.rvHappyPlacesList?.adapter as HappyPlacesAdapter
                 adapter.notifyEditItem(this@MainActivity, viewHolder.adapterPosition, ADD_PlACE_ACTIVITY_REQUEST_CODE)
+                getHappyPlacesListFromLocalDB()
             }
         }
 
         val editItemTouchHelper = ItemTouchHelper(editSwipeHandler)
         editItemTouchHelper.attachToRecyclerView(binding?.rvHappyPlacesList)
+        val deleteSwipeHandler = object : SwipeToDeleteCallback(this){
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val adapter = binding?.rvHappyPlacesList?.adapter as HappyPlacesAdapter
+                adapter.removeAt(viewHolder.adapterPosition)
+                getHappyPlacesListFromLocalDB()
+            }
+        }
+        val deleteItemTouchHelper = ItemTouchHelper(deleteSwipeHandler)
+        deleteItemTouchHelper.attachToRecyclerView(binding?.rvHappyPlacesList)
     }
     private fun getHappyPlacesListFromLocalDB() {
         val dbHandler = DatabaseHandler(this)

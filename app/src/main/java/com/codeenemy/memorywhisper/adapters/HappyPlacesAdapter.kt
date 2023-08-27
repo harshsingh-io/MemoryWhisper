@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.codeenemy.memorywhisper.R
 import com.codeenemy.memorywhisper.activities.AddHappyPlaceActivity
 import com.codeenemy.memorywhisper.activities.MainActivity
+import com.codeenemy.memorywhisper.database.DatabaseHandler
 import com.codeenemy.memorywhisper.models.HappyPlaceModel
 import kotlinx.coroutines.NonDisposableHandle.parent
 import com.codeenemy.memorywhisper.databinding.ItemHappyPlaceBinding
@@ -57,6 +58,14 @@ open class HappyPlacesAdapter(
     }
     interface OnClickListener {
         fun onClick(position: Int, model: HappyPlaceModel)
+    }
+    fun removeAt(position: Int){
+        val dbHandler = DatabaseHandler(context)
+        val isDeleted = dbHandler.deleteHappyPlace(list[position])
+        if (isDeleted>0) {
+            list.removeAt(position)
+            notifyItemRemoved(position)
+        }
     }
     fun notifyEditItem(activity: Activity, position: Int, requestCode: Int) {
         val intent = Intent(context, AddHappyPlaceActivity::class.java)
