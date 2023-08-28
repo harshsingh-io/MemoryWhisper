@@ -31,15 +31,8 @@ class DatabaseHandler(context: Context) :
 
     override fun onCreate(db: SQLiteDatabase?) {
         //creating table with fields
-        val CREATE_HAPPY_PLACE_TABLE = ("CREATE TABLE " + TABLE_HAPPY_PLACE + "("
-                + KEY_ID + " INTEGER PRIMARY KEY,"
-                + KEY_TITLE + " TEXT,"
-                + KEY_IMAGE + " TEXT,"
-                + KEY_DESCRIPTION + " TEXT,"
-                + KEY_DATE + " TEXT,"
-                + KEY_LOCATION + " TEXT,"
-                + KEY_LATITUDE + " TEXT,"
-                + KEY_LONGITUDE + " TEXT)")
+        val CREATE_HAPPY_PLACE_TABLE =
+            ("CREATE TABLE " + TABLE_HAPPY_PLACE + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TITLE + " TEXT," + KEY_IMAGE + " TEXT," + KEY_DESCRIPTION + " TEXT," + KEY_DATE + " TEXT," + KEY_LOCATION + " TEXT," + KEY_LATITUDE + " TEXT," + KEY_LONGITUDE + " TEXT)")
         db?.execSQL(CREATE_HAPPY_PLACE_TABLE)
     }
 
@@ -65,6 +58,7 @@ class DatabaseHandler(context: Context) :
         db.close()
         return result
     }
+
     fun updateHappyPlace(happyPlace: HappyPlaceModel): Int {
         val db = this.writableDatabase
         val contentValues = ContentValues()
@@ -77,17 +71,19 @@ class DatabaseHandler(context: Context) :
         contentValues.put(KEY_LONGITUDE, happyPlace.longitude)
 
         //Inserting Row
-        val success = db.update(TABLE_HAPPY_PLACE, contentValues, KEY_ID + "=" + happyPlace.id,
-            null)
+        val success = db.update(
+            TABLE_HAPPY_PLACE, contentValues, KEY_ID + "=" + happyPlace.id, null
+        )
         // 2nd argument is string
         db.close()
         return success
     }
-    fun deleteHappyPlace(happyPlace: HappyPlaceModel):Int {
+
+    fun deleteHappyPlace(happyPlace: HappyPlaceModel): Int {
         val db = this.writableDatabase
 
         // Delete the row with the specified ID
-        val success = db.delete(TABLE_HAPPY_PLACE, KEY_ID +"="+ happyPlace.id, null)
+        val success = db.delete(TABLE_HAPPY_PLACE, KEY_ID + "=" + happyPlace.id, null)
 
         db.close()
         return success
@@ -99,10 +95,10 @@ class DatabaseHandler(context: Context) :
         val db = this.readableDatabase
 
         try {
-            val cursor : Cursor = db.rawQuery(selectQuery, null)
+            val cursor: Cursor = db.rawQuery(selectQuery, null)
             val columnNames = cursor.columnNames
             Log.d("CursorColumnNames", columnNames.joinToString(", "))
-            if (cursor.moveToFirst()){
+            if (cursor.moveToFirst()) {
                 do {
                     val place = HappyPlaceModel(
                         cursor.getInt(cursor.getColumnIndexOrThrow(KEY_ID)),

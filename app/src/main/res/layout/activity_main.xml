@@ -5,12 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.MainActivity">
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_happy_places_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
         tools:visibility="gone" />
+
     <TextView
         android:id="@+id/tv_no_records_available"
         android:layout_width="match_parent"
@@ -22,14 +24,13 @@
         tools:visibility="visible" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAddHappyPlace"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/fabAddHappyPlace"
-        android:layout_gravity= "bottom|end"
+        android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_action_add_24dp"
-        android:contentDescription="@string/adding_places" />
-
+        android:contentDescription="@string/adding_places"
+        android:src="@drawable/ic_action_add_24dp" />
 
 
 </FrameLayout>

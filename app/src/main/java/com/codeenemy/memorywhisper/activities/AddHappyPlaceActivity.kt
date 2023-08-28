@@ -63,7 +63,8 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
         }
         if (intent.hasExtra(MainActivity.EXTRA_PLACE_DETAILS)) {
             mHappyPlaceDetails = intent.getSerializableExtra(
-                MainActivity.EXTRA_PLACE_DETAILS) as HappyPlaceModel
+                MainActivity.EXTRA_PLACE_DETAILS
+            ) as HappyPlaceModel
 
         }
         dateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
@@ -99,7 +100,8 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
             R.id.edit_text_date -> {
                 DatePickerDialog(
                     this@AddHappyPlaceActivity,
-                    dateSetListener, cal.get(Calendar.YEAR),
+                    dateSetListener,
+                    cal.get(Calendar.YEAR),
                     cal.get(Calendar.MONTH),
                     cal.get(Calendar.DAY_OF_MONTH)
                 ).show()
@@ -123,7 +125,8 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
             R.id.button_save -> {
                 when {
                     binding?.editTextTitle?.text.isNullOrEmpty() -> {
-                        Toast.makeText(this, "Please enter a valid Title.", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, "Please enter a valid Title.", Toast.LENGTH_LONG)
+                            .show()
                     }
 
                     binding?.editTextDescription?.text.isNullOrEmpty() -> {
@@ -142,7 +145,7 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
 
                     else -> {
                         val happyPlaceModel = HappyPlaceModel(
-                            if (mHappyPlaceDetails==null) 0 else mHappyPlaceDetails!!.id,
+                            if (mHappyPlaceDetails == null) 0 else mHappyPlaceDetails!!.id,
                             binding?.editTextTitle?.text.toString(),
                             saveImageToInternalStorage.toString(),
                             binding?.editTextDescription?.text.toString(),
@@ -225,10 +228,8 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun showRationalDialogForPermissions() {
         AlertDialog.Builder(this).setMessage(
-            "It look like you have turned off permission " +
-                    "required for this feature. It can be enabled under the Applications Settings."
-        )
-            .setPositiveButton("GO TO SETTINGS") { _, _ ->
+            "It look like you have turned off permission " + "required for this feature. It can be enabled under the Applications Settings."
+        ).setPositiveButton("GO TO SETTINGS") { _, _ ->
                 try {
                     val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                     val uri = Uri.fromParts("package", packageName, null)
@@ -285,8 +286,7 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
                     val contentURI = data.data
                     try {
                         val selectedImageBitmap = MediaStore.Images.Media.getBitmap(
-                            this
-                                .contentResolver, contentURI
+                            this.contentResolver, contentURI
                         )
                         saveImageToInternalStorage = saveImageToInternalStorage(selectedImageBitmap)
 
@@ -295,8 +295,7 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
                     } catch (e: IOException) {
                         e.printStackTrace()
                         Toast.makeText(
-                            this@AddHappyPlaceActivity, "Failed to load Image!", Toast
-                                .LENGTH_LONG
+                            this@AddHappyPlaceActivity, "Failed to load Image!", Toast.LENGTH_LONG
                         ).show()
                     }
                 }

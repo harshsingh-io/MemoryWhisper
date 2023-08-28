@@ -35,7 +35,8 @@ open class HappyPlacesAdapter(
             )
         )
     }
-//TODO can be do something wrong
+
+    //TODO can be do something wrong
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val model = list[position]
         if (holder is ViewHolder) {
@@ -43,12 +44,13 @@ open class HappyPlacesAdapter(
             holder.tvTitle.text = model.title
             holder.tvDescription.text = model.description
             holder.itemView.setOnClickListener {
-                if (onClickListener != null){
+                if (onClickListener != null) {
                     onClickListener!!.onClick(position, model)
                 }
             }
         }
     }
+
     fun setOnClickListener(onClickListener: OnClickListener) {
         this.onClickListener = onClickListener
     }
@@ -56,20 +58,23 @@ open class HappyPlacesAdapter(
     override fun getItemCount(): Int {
         return list.size
     }
+
     interface OnClickListener {
         fun onClick(position: Int, model: HappyPlaceModel)
     }
-    fun removeAt(position: Int){
+
+    fun removeAt(position: Int) {
         val dbHandler = DatabaseHandler(context)
         val isDeleted = dbHandler.deleteHappyPlace(list[position])
-        if (isDeleted>0) {
+        if (isDeleted > 0) {
             list.removeAt(position)
             notifyItemRemoved(position)
         }
     }
+
     fun notifyEditItem(activity: Activity, position: Int, requestCode: Int) {
         val intent = Intent(context, AddHappyPlaceActivity::class.java)
-        intent.putExtra(MainActivity.EXTRA_PLACE_DETAILS,list[position])
+        intent.putExtra(MainActivity.EXTRA_PLACE_DETAILS, list[position])
         activity.startActivityForResult(intent, requestCode)
         notifyItemChanged(position)
     }
