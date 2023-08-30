@@ -1,6 +1,7 @@
 package com.codeenemy.memorywhisper.activities
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
@@ -9,9 +10,12 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.Bitmap
+import android.location.Location
+import android.location.LocationManager
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Looper
 import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Log
@@ -21,6 +25,12 @@ import com.codeenemy.memorywhisper.R
 import com.codeenemy.memorywhisper.database.DatabaseHandler
 import com.codeenemy.memorywhisper.databinding.ActivityAddHappyPlaceBinding
 import com.codeenemy.memorywhisper.models.HappyPlaceModel
+import com.codeenemy.memorywhisper.utils.GetAddressFromLatLng
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
@@ -49,6 +59,8 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
     private var mLongitude: Double = 0.0
     private var mHappyPlaceDetails: HappyPlaceModel? = null
 
+    private lateinit var mFusedLocationClient: FusedLocationProviderClient
+
 
     companion object {
         //        private const val CAMERA_PERMISSION_CODE = 1
@@ -67,8 +79,12 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
         binding?.toolbarAddPlace?.setNavigationOnClickListener {
             onBackPressed()
         }
-        if(!Places.isInitialized()) {
-            Places.initialize(this@AddHappyPlaceActivity, resources.getString(R.string.google_maps_api_key))
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        if (!Places.isInitialized()) {
+            Places.initialize(
+                this@AddHappyPlaceActivity,
+                resources.getString(R.string.google_maps_api_key)
+            )
         }
 
 
@@ -105,7 +121,44 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
         binding?.tvAddImage?.setOnClickListener(this)
         binding?.buttonSave?.setOnClickListener(this)
         binding?.editTextLocation?.setOnClickListener(this)
+        binding?.tvSelectCurrentLocation?.setOnClickListener(this)
 
+    }
+
+    private fun isLocationEnabled(): Boolean {
+        val locationManager: LocationManager =
+            getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager
+            .isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun requestNewLocationData() {
+        val mLocationRequest = LocationRequest()
+        mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        mLocationRequest.interval = 1000
+        mLocationRequest.numUpdates = 1
+        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallBack, Looper
+            .myLooper())
+    }
+    private val mLocationCallBack = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult) {
+            val mLastLocation: Location? = locationResult.lastLocation
+            mLatitude = mLastLocation!!.latitude
+            Log.i("Current Latitude", "$mLatitude")
+            mLongitude = mLastLocation.longitude
+            Log.i("Current Longitude", "$mLongitude")
+            val addressTask = GetAddressFromLatLng(this@AddHappyPlaceActivity, mLatitude,mLongitude)
+            addressTask.setAddressListener(object: GetAddressFromLatLng.AddressListener{
+                override fun onAddressFound(address: String?) {
+                    binding?.editTextLocation?.setText(address)
+                }
+                override fun onError() {
+                    Log.e("Get Address:: ", "Something went wrong")
+                }
+            })
+            addressTask.getAddress()
+        }
     }
 
     override fun onClick(v: View?) {
@@ -184,6 +237,7 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
                     }
                 }
             }
+
             R.id.edit_text_location -> {
                 try {
                     val fields = listOf(
@@ -191,12 +245,47 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
                         Place.Field.ADDRESS
                     )
 
-                    val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN,
-                        fields).build(this@AddHappyPlaceActivity)
+                    val intent = Autocomplete.IntentBuilder(
+                        AutocompleteActivityMode.FULLSCREEN,
+                        fields
+                    ).build(this@AddHappyPlaceActivity)
                     startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE)
 
-                } catch (e:Exception) {
+                } catch (e: Exception) {
                     e.printStackTrace()
+                }
+            }
+
+            R.id.tv_select_current_location -> {
+                if (!isLocationEnabled()) {
+                    Toast.makeText(
+                        this,
+                        "Your location provider is turned off. Please turn it on.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                    startActivity(intent)
+
+                } else {
+                    Dexter.withActivity(this).withPermissions(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    ).withListener(object : MultiplePermissionsListener {
+                        override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
+                            if (report!!.areAllPermissionsGranted()) {
+                                requestNewLocationData()
+                            }
+                        }
+
+                        override fun onPermissionRationaleShouldBeShown(
+                            permissions: MutableList<PermissionRequest>?,
+                            token: PermissionToken?
+                        ) {
+                            showRationalDialogForPermissions()
+                        }
+                    }).onSameThread().check()
+
+
                 }
             }
         }
@@ -258,17 +347,17 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
         AlertDialog.Builder(this).setMessage(
             "It look like you have turned off permission " + "required for this feature. It can be enabled under the Applications Settings."
         ).setPositiveButton("GO TO SETTINGS") { _, _ ->
-                try {
-                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                    val uri = Uri.fromParts("package", packageName, null)
-                    intent.data = uri
-                    startActivity(intent)
-                } catch (e: ActivityNotFoundException) {
-                    e.printStackTrace()
-                }
-            }.setNegativeButton("Cancel") { dialog, _ ->
-                dialog.dismiss()
-            }.show()
+            try {
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                val uri = Uri.fromParts("package", packageName, null)
+                intent.data = uri
+                startActivity(intent)
+            } catch (e: ActivityNotFoundException) {
+                e.printStackTrace()
+            }
+        }.setNegativeButton("Cancel") { dialog, _ ->
+            dialog.dismiss()
+        }.show()
     }
 
     private fun updateDateInView() {
